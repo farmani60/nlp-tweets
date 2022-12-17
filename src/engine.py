@@ -3,6 +3,7 @@ import torch.nn as nn
 
 
 def train(data_loader, model, optimizer, device):
+
     # set the model to training mode
     for data in data_loader:
         # fetch tweet and target from the dict
@@ -10,8 +11,9 @@ def train(data_loader, model, optimizer, device):
         targets = data["target"]
 
         # move the data to device that we want to use
-        tweets = tweets.to(device, dtype=torch.long)
-        targets = targets.to(device, dtype=torch.float)
+        if device:
+            tweets = tweets.to(device, dtype=torch.long)
+            targets = targets.to(device, dtype=torch.float)
 
         # clear the gradients
         optimizer.zero_grad()
@@ -20,7 +22,7 @@ def train(data_loader, model, optimizer, device):
         predictions = model(tweets)
 
         # calculate the loss
-        loss = nn.BCEWithLogitsLoss(
+        loss = nn.BCEWithLogitsLoss()(
             predictions,
             targets.view(-1, 1)
         )
@@ -46,7 +48,8 @@ def evaluate(data_loader, model, device):
         for data in data_loader:
             tweets = data["tweet"]
             targets = data["target"]
-            tweets = tweets.to(device, dtype=torch.long)
+            if device:
+                tweets = tweets.to(device, dtype=torch.long)
             # targets = targets.to(device, dtype=torch.float)
 
             # make predictions

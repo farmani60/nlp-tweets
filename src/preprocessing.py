@@ -8,7 +8,7 @@ from nltk.tokenize import TweetTokenizer
 nltk.download("stopwords")
 
 
-def clean_tweet(tweet: str) -> str:
+def clean_tweet(tweet):
     # make text lower case
     tweet = tweet.lower()
     # remove stock market tickers like $GE

@@ -14,5 +14,5 @@ class TweetDataset:
         target = self.targets[item]
         return {
             "tweet": torch.tensor(tweet, dtype=torch.long),
-            "targe": torch.tensor(target, dtype=torch.float)
+            "target": torch.tensor(target, dtype=torch.float)
         }

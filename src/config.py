@@ -9,7 +9,7 @@ MODEL_DIR = "../models/"
 
 # target
 TARGET = "target"
-RELABELED_TARGET = "config.RELABELED_TARGET"
+RELABELED_TARGET = "relabeled_target"
 
 # features
 ID = "id"
@@ -31,7 +31,7 @@ EMBED_SIZE = 300
 MAX_LEN = 202
 VOCAB_SIZE = 172901
 N_EPOCHS = 10
-BATCH_SIZE = 128
+BATCH_SIZE = 5
 LEARNING_RATE = 0.001
 N_FOLDS = 5
 
