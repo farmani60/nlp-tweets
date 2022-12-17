@@ -34,8 +34,6 @@ def create_folds():
     # clean tweets
     train_df[config.CLEANED_TEXT] = train_df[config.TEXT].apply(clean_tweet)
     test_df[config.CLEANED_TEXT] = test_df[config.TEXT].apply(clean_tweet)
-    train_df[config.CLEANED_TEXT] = train_df[config.CLEANED_TEXT].astype(str)
-    test_df[config.CLEANED_TEXT] = test_df[config.CLEANED_TEXT].astype(str)
 
     # create folds
     train_df["k_fold"] = -1
@@ -140,8 +138,9 @@ def run(df, fold):
         prediction_classes = np.array(1 * (torch.sigmoid(predictions) >= config.THRESHOLD))
         # calculate accuracy
         accuracy = metrics.accuracy_score(targets, prediction_classes)
+        f1_score = metrics.f1_score(targets, prediction_classes)
         print(
-            f"FOLD: {fold}, EPOCH: {epoch}, Accuracy Score = {accuracy}"
+            f"FOLD: {fold}, EPOCH: {epoch}, Accuracy Score = {accuracy}, F1 Score = {f1_score}"
         )
         # simple early stopping
         if accuracy > best_accuracy:
