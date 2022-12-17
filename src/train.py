@@ -1,17 +1,17 @@
 import os
 import pickle
 
+import gensim.downloader as api
 import numpy as np
 import pandas as pd
-from sklearn import metrics
-import gensim.downloader as api
 import tensorflow as tf
 import torch
+from sklearn import metrics
 
 import config as config
 import dataset as dataset
-import lstm as lstm
 import engine as engine
+import lstm as lstm
 
 
 def load_embedding_matrix(corpus,  gensim_pretrained_emb):
