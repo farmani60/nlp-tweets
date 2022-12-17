@@ -6,10 +6,10 @@ import torch
 from sklearn import metrics, model_selection
 
 from src import config
-from src.engine import train, evaluate
-from src.lstm import LSTM
-from src.dataset import TweetDataset
 from src.data_cleaning import relabel_target
+from src.dataset import TweetDataset
+from src.engine import evaluate, train
+from src.lstm import LSTM
 from src.preprocessing import clean_tweet
 
 

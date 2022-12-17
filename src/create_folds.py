@@ -1,6 +1,6 @@
 import pandas as pd
-from sklearn import model_selection
 import tensorflow as tf
+from sklearn import model_selection
 
 import config as config
 from data_cleaning import relabel_target
@@ -9,10 +9,8 @@ from preprocessing import clean_tweet
 if __name__ == "__main__":
     # read data
     print("Load data...")
-    # train_df = pd.read_csv(config.ORIGINAL_TRAIN_DATA)
-    # test_df = pd.read_csv(config.ORIGINAL_TEST_DATA)
-    train_df = pd.read_csv("/home/reza/Documents/kaggle/project/nlp-tweets/data/train.csv")
-    test_df = pd.read_csv("/home/reza/Documents/kaggle/project/nlp-tweets/data/test.csv")
+    train_df = pd.read_csv(config.ORIGINAL_TRAIN_DATA)
+    test_df = pd.read_csv(config.ORIGINAL_TEST_DATA)
 
     # ralable some tweets
     train_df = relabel_target(train_df)
