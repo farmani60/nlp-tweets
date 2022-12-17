@@ -91,7 +91,7 @@ def run(df, fold):
     # class in batches specified by batch size
     train_data_loader = torch.utils.data.DataLoader(
         train_dataset,
-        batch_size=config.BATCH_SIZE,
+        batch_size=config.TRAIN_BATCH_SIZE,
         num_workers=2
     )
 
@@ -104,7 +104,7 @@ def run(df, fold):
     # create torch dataloader for validation
     valid_data_loader = torch.utils.data.DataLoader(
         valid_dataset,
-        batch_size=config.BATCH_SIZE,
+        batch_size=config.TEST_BATCH_SIZE,
         num_workers=1
     )
 
