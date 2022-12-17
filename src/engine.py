@@ -47,7 +47,7 @@ def evaluate(data_loader, model, device):
             tweets = data["tweet"]
             targets = data["target"]
             tweets = tweets.to(device, dtype=torch.long)
-            targets = targets.to(device, dtype=torch.float)
+            # targets = targets.to(device, dtype=torch.float)
 
             # make predictions
             predictions = model(tweets)
@@ -55,7 +55,7 @@ def evaluate(data_loader, model, device):
             # move predictions and targets to list
             # we need to move predictions and targets to cpu too
             predictions = predictions.cpu().numpy().tolist()
-            targets = data["target"].cpu().numpy().tolist()
+            # targets = data["target"].cpu().numpy().tolist()
             final_predictions.extend(predictions)
             final_targets.extend(targets)
 
