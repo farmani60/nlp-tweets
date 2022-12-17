@@ -23,7 +23,10 @@ TOKENS = "tokens"
 ALL_TEXT = "all_text"
 CLEANED_TEXT = "cleaned_text"
 
-# Pretrained Word2Vec
+# Pretrained vectors
+# can find pretrained embeddings:
+# import gensim.downloader as api
+# api.info()
 PRETRAINED_WORD2VEC = "word2vec-google-news-300"
 PRETRAINED_GLOVE = "glove-twitter-200"
 EMBED_SIZE = 200
