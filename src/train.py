@@ -51,10 +51,10 @@ def run(model, df, fold):
     # this padding is done on left hand side
     # if sequence is > MAXLEN, it is truncated on left hand side too
     x_train = tf.keras.preprocessing.sequence.pad_sequences(
-        x_train, maxlen=config.MAXLEN
+        x_train, maxlen=config.MAX_LEN
     )
     x_test = tf.keras.preprocessing.sequence.pad_sequences(
-        x_test, maxlen=config.MAXLEN
+        x_test, maxlen=config.MAX_LEN
     )
 
     # initialize dataset class for training
