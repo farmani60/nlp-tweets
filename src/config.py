@@ -25,7 +25,8 @@ CLEANED_TEXT = "cleaned_text"
 
 # Pretrained Word2Vec
 PRETRAINED_WORD2VEC = "word2vec-google-news-300"
-EMBED_SIZE = 300
+PRETRAINED_GLOVE = "glove-twitter-200"
+EMBED_SIZE = 200
 
 # training
 MAX_LEN = 202

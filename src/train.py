@@ -107,7 +107,7 @@ def run(df, fold):
     )
 
     # load embedding vectors
-    embedding_matrix = load_embedding_matrix(tokenizer.word_index.items(), config.PRETRAINED_WORD2VEC)
+    embedding_matrix = load_embedding_matrix(tokenizer.word_index.items(), config.PRETRAINED_GLOVE)
 
     # create torch device for using gpu
     # device = torch.device("cuda")
