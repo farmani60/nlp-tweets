@@ -5,6 +5,8 @@ import torch.nn as nn
 def train(data_loader, model, optimizer, device):
 
     # set the model to training mode
+    model.train()
+
     for data in data_loader:
         # fetch tweet and target from the dict
         tweets = data["tweet"]

@@ -10,7 +10,7 @@ from src.data_cleaning import relabel_target
 from src.dataset import TweetDataset
 from src.engine import evaluate, train
 from src.lstm import LSTM
-from src.preprocessing import clean_tweet
+from src.preprocessing import clean_tweet, create_meta_features
 
 
 def load_embedding_matrix(corpus,  gensim_pretrained_emb):
@@ -30,6 +30,9 @@ def create_folds():
 
     # relabel some tweets
     train_df = relabel_target(train_df)
+
+    train_df = create_meta_features(train_df)
+    test_df = create_meta_features(test_df)
 
     # clean tweets
     train_df[config.CLEANED_TEXT] = train_df[config.TEXT].apply(clean_tweet)
