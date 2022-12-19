@@ -1,5 +1,6 @@
 # data
 DATA_DIR = "../data/"
+EMBEDDINGS_DIR = "../embeddings/"
 ORIGINAL_TRAIN_DATA = DATA_DIR + "train.csv"
 ORIGINAL_TEST_DATA = DATA_DIR + "test.csv"
 MODIFIED_TRAIN = DATA_DIR + "modified_train.csv"
@@ -28,7 +29,8 @@ CLEANED_TEXT = "cleaned_text"
 # import gensim.downloader as api
 # api.info()
 PRETRAINED_WORD2VEC = "word2vec-google-news-300"
-PRETRAINED_GLOVE = "glove-twitter-200"
+PRETRAINED_GLOVE = "glove-wiki-gigaword-300"
+GLOVE_EMBEDDINGS = EMBEDDINGS_DIR + "glove.840B.300d.pkl"
 EMBED_SIZE = 200
 
 # training

@@ -10,6 +10,7 @@ from src.data_cleaning import relabel_target
 from src.dataset import TweetDataset
 from src.engine import evaluate, train
 from src.lstm import LSTM
+from src.new_data_cleaning import clean
 from src.preprocessing import clean_tweet, create_meta_features
 
 
@@ -35,8 +36,8 @@ def create_folds():
     test_df = create_meta_features(test_df)
 
     # clean tweets
-    train_df[config.CLEANED_TEXT] = train_df[config.TEXT].apply(clean_tweet)
-    test_df[config.CLEANED_TEXT] = test_df[config.TEXT].apply(clean_tweet)
+    train_df[config.CLEANED_TEXT] = train_df[config.TEXT].apply(clean)
+    test_df[config.CLEANED_TEXT] = test_df[config.TEXT].apply(clean)
 
     # create folds
     train_df["k_fold"] = -1
