@@ -11,12 +11,14 @@ from src.dataset import TweetDataset
 from src.engine import evaluate, train
 from src.lstm import LSTM
 from src.new_data_cleaning import clean
-from src.preprocessing import clean_tweet, create_meta_features
+from src.preprocessing import (add_keyword_to_text, clean_tweet,
+                               create_meta_features)
 
 
 def load_embedding_matrix(corpus,  gensim_pretrained_emb):
     print("Loading embedding vectors...")
-    vectors = api.load(gensim_pretrained_emb)
+    # vectors = api.load(gensim_pretrained_emb)
+    vectors = np.load(gensim_pretrained_emb, allow_pickle=True)
     embedding_weights = np.zeros((config.VOCAB_SIZE, config.EMBED_SIZE))
     for word, i in corpus:
         if word in vectors:
@@ -32,18 +34,57 @@ def create_folds():
     # relabel some tweets
     train_df = relabel_target(train_df)
 
-    train_df = create_meta_features(train_df)
-    test_df = create_meta_features(test_df)
+    # train_df = create_meta_features(train_df)
+    # test_df = create_meta_features(test_df)
+
+    train_df = add_keyword_to_text(train_df)
+    test_df = add_keyword_to_text(test_df)
 
     # clean tweets
-    train_df[config.CLEANED_TEXT] = train_df[config.TEXT].apply(clean)
-    test_df[config.CLEANED_TEXT] = test_df[config.TEXT].apply(clean)
+    train_df[config.CLEANED_TEXT] = train_df[config.TEXT_WITH_KEYWORD].apply(clean)
+    test_df[config.CLEANED_TEXT] = test_df[config.TEXT_WITH_KEYWORD].apply(clean)
 
     # create folds
     train_df["k_fold"] = -1
     train_df = train_df.sample(frac=1, random_state=42).reset_index(drop=True)
     kf = model_selection.StratifiedKFold(n_splits=config.N_FOLDS)
     for f, (t_, v_) in enumerate(kf.split(X=train_df, y=train_df.target.values)):
+        train_df.loc[v_, "k_fold"] = f
+
+    return train_df, test_df
+
+
+def create_k_fold_with_keyword():
+    print("Load data...")
+    train_df = pd.read_csv(config.ORIGINAL_TRAIN_DATA)
+    test_df = pd.read_csv(config.ORIGINAL_TEST_DATA)
+
+    # relabel some tweets
+    train_df = relabel_target(train_df)
+
+    # train_df = create_meta_features(train_df)
+    # test_df = create_meta_features(test_df)
+
+    train_df = add_keyword_to_text(train_df)
+    test_df = add_keyword_to_text(test_df)
+
+    # clean tweets
+    train_df[config.CLEANED_TEXT] = train_df[config.TEXT_WITH_KEYWORD].apply(clean)
+    test_df[config.CLEANED_TEXT] = test_df[config.TEXT_WITH_KEYWORD].apply(clean)
+
+    # fill nan values in keyword feature
+    train_df["keyword"] = train_df["keyword"].fillna("no_keyword")
+    test_df["keyword"] = test_df["keyword"].fillna("no_keyword")
+
+    # create folds
+    train_df["k_fold"] = -1
+
+    # shuffle train set
+    train_df = train_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+    skf = model_selection.StratifiedKFold(n_splits=config.N_FOLDS)
+
+    for f, (t_, v_) in enumerate(skf.split(X=train_df, y=train_df.keyword.values)):
         train_df.loc[v_, "k_fold"] = f
 
     return train_df, test_df
@@ -111,7 +152,7 @@ def run(df, fold):
     )
 
     # load embedding vectors
-    embedding_matrix = load_embedding_matrix(tokenizer.word_index.items(), config.PRETRAINED_GLOVE)
+    embedding_matrix = load_embedding_matrix(tokenizer.word_index.items(), config.GLOVE_EMBEDDINGS)
 
     # create torch device for using gpu
     # device = torch.device("cuda")

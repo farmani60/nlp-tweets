@@ -23,6 +23,7 @@ TOKENS = "tokens"
 # created features
 ALL_TEXT = "all_text"
 CLEANED_TEXT = "cleaned_text"
+TEXT_WITH_KEYWORD = "text_with_keyword"
 
 # Pretrained vectors
 # can find pretrained embeddings:
@@ -31,10 +32,10 @@ CLEANED_TEXT = "cleaned_text"
 PRETRAINED_WORD2VEC = "word2vec-google-news-300"
 PRETRAINED_GLOVE = "glove-wiki-gigaword-300"
 GLOVE_EMBEDDINGS = EMBEDDINGS_DIR + "glove.840B.300d.pkl"
-EMBED_SIZE = 200
+EMBED_SIZE = 300
 
 # training
-MAX_LEN = 202
+MAX_LEN = 128
 VOCAB_SIZE = 172901
 N_EPOCHS = 10
 TRAIN_BATCH_SIZE = 16

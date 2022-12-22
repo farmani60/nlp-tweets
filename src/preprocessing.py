@@ -3,9 +3,12 @@ import string
 
 import nltk
 import numpy as np
+import pandas as pd
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
 from spellchecker import SpellChecker
+
+from src import config
 
 nltk.download("stopwords")
 
@@ -85,4 +88,9 @@ def create_meta_features(df):
     # mention_count
     df['mention_count'] = df['text'].apply(lambda x: len([c for c in str(x) if c == '@']))
 
+    return df
+
+
+def add_keyword_to_text(df):
+    df[config.TEXT_WITH_KEYWORD] = df["keyword"].fillna("") + " " + df["text"]
     return df
