@@ -1,0 +1,25 @@
+[tool.black]
+line-length = 120
+target-version = ['py37']
+exclude = '''
+    (
+        \.eggs
+        | \.git
+        | \.hg
+        | \.mypy_cache
+        | \.tox
+        | \.venv
+        | _build
+        | buck-out
+        | build
+        | dist
+        # earlybirds-specific
+        | earlybirds
+    )
+    '''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+py_version = 37
+known_first_party="farmani"

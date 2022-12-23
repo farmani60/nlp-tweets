@@ -14,18 +14,10 @@ class LSTM(nn.Module):
         embed_dim = embedding_matix.shape[1]
 
         # input embedding layer
-        self.embedding = nn.Embedding(
-            num_embeddings=num_words,
-            embedding_dim=embed_dim
-        )
+        self.embedding = nn.Embedding(num_embeddings=num_words, embedding_dim=embed_dim)
 
         # use embedding matrix as weights of embedding layer
-        self.embedding.weight = nn.Parameter(
-            torch.tensor(
-                embedding_matix,
-                dtype=torch.float32
-            )
-        )
+        self.embedding.weight = nn.Parameter(torch.tensor(embedding_matix, dtype=torch.float32))
 
         # not to train the pretrained embeddings
         self.embedding.weight.requires_grad = False
@@ -41,7 +33,7 @@ class LSTM(nn.Module):
         # output linear layer with one output
         # input (512) = 2*128 + 2*128 for mean and same for max pooling
         # 128 for each direction
-        self.out = nn.Linear(4*self._hidden_size, 1)
+        self.out = nn.Linear(4 * self._hidden_size, 1)
 
     def forward(self, x):
         # pass data through embedding layer

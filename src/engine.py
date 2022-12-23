@@ -24,10 +24,7 @@ def train(data_loader, model, optimizer, device):
         predictions = model(tweets)
 
         # calculate the loss
-        loss = nn.BCEWithLogitsLoss()(
-            predictions,
-            targets.view(-1, 1)
-        )
+        loss = nn.BCEWithLogitsLoss()(predictions, targets.view(-1, 1))
 
         # compute gradients of loss w.r.t.
         # all parameters of the model that are trainable

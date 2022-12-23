@@ -11,11 +11,15 @@ from src.dataset import TweetDataset
 from src.engine import evaluate, train
 from src.lstm import LSTM
 from src.new_data_cleaning import clean
-from src.preprocessing import (add_keyword_to_text, clean_tweet,
-                               create_meta_features)
+from src.preprocessing import (
+    add_keyword_to_text,
+    clean_tweet,
+    create_meta_features,
+    remove_repetition_subtext,
+)
 
 
-def load_embedding_matrix(corpus,  gensim_pretrained_emb):
+def load_embedding_matrix(corpus, gensim_pretrained_emb):
     print("Loading embedding vectors...")
     # vectors = api.load(gensim_pretrained_emb)
     vectors = np.load(gensim_pretrained_emb, allow_pickle=True)
@@ -33,6 +37,10 @@ def create_folds():
 
     # relabel some tweets
     train_df = relabel_target(train_df)
+
+    # remove repeated punctuations
+    train_df = remove_repetition_subtext(train_df, "text")
+    test_df = remove_repetition_subtext(test_df, "text")
 
     # train_df = create_meta_features(train_df)
     # test_df = create_meta_features(test_df)
@@ -61,6 +69,10 @@ def create_k_fold_with_keyword():
 
     # relabel some tweets
     train_df = relabel_target(train_df)
+
+    # remove repeated punctuations
+    train_df = remove_repetition_subtext(train_df, "text")
+    test_df = remove_repetition_subtext(test_df, "text")
 
     # train_df = create_meta_features(train_df)
     # test_df = create_meta_features(test_df)
@@ -116,40 +128,22 @@ def run(df, fold):
     # zero pad the training sequences given the maximum length
     # this padding is done on left hand side
     # if sequence is > MAX_LEN, it is truncated on left hand side too
-    x_train = tf.keras.preprocessing.sequence.pad_sequences(
-        x_train, maxlen=config.MAX_LEN
-    )
-    x_test = tf.keras.preprocessing.sequence.pad_sequences(
-        x_test, maxlen=config.MAX_LEN
-    )
+    x_train = tf.keras.preprocessing.sequence.pad_sequences(x_train, maxlen=config.MAX_LEN)
+    x_test = tf.keras.preprocessing.sequence.pad_sequences(x_test, maxlen=config.MAX_LEN)
 
     # initialize dataset class for training
-    train_dataset = TweetDataset(
-        tweets=x_train,
-        targets=train_df.target.values
-    )
+    train_dataset = TweetDataset(tweets=x_train, targets=train_df.target.values)
 
     # create torch dataloader for training
     # torch dataloader loads the data using dataset
     # class in batches specified by batch size
-    train_data_loader = torch.utils.data.DataLoader(
-        train_dataset,
-        batch_size=config.TRAIN_BATCH_SIZE,
-        num_workers=2
-    )
+    train_data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config.TRAIN_BATCH_SIZE, num_workers=2)
 
     # initialize dataset class for validation
-    valid_dataset = TweetDataset(
-        tweets=x_test,
-        targets=valid_df.target.values
-    )
+    valid_dataset = TweetDataset(tweets=x_test, targets=valid_df.target.values)
 
     # create torch dataloader for validation
-    valid_data_loader = torch.utils.data.DataLoader(
-        valid_dataset,
-        batch_size=config.TEST_BATCH_SIZE,
-        num_workers=1
-    )
+    valid_data_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=config.TEST_BATCH_SIZE, num_workers=1)
 
     # load embedding vectors
     embedding_matrix = load_embedding_matrix(tokenizer.word_index.items(), config.GLOVE_EMBEDDINGS)
@@ -168,7 +162,7 @@ def run(df, fold):
 
     print("Training Model...")
     # set the accuracy to zero
-    best_accuracy = 0.
+    best_accuracy = 0.0
     # set early stopping counter to zero
     early_stopping_counter = 0
     # train and validate for all epochs
@@ -184,9 +178,7 @@ def run(df, fold):
         # calculate accuracy
         accuracy = metrics.accuracy_score(targets, prediction_classes)
         f1_score = metrics.f1_score(targets, prediction_classes)
-        print(
-            f"FOLD: {fold}, EPOCH: {epoch}, Accuracy Score = {accuracy}, F1 Score = {f1_score}"
-        )
+        print(f"FOLD: {fold}, EPOCH: {epoch}, Accuracy Score = {accuracy}, F1 Score = {f1_score}")
         # simple early stopping
         if accuracy > best_accuracy:
             best_accuracy = accuracy

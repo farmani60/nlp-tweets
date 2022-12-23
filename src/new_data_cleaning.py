@@ -714,14 +714,14 @@ def clean(tweet):
     tweet = re.sub(r"https?:\/\/t.co\/[A-Za-z0-9]+", "", tweet)
 
     # Words with punctuations and special characters
-    punctuations = '@#!?+&*[]-%.:/();$=><|{}^' + "'`"
+    punctuations = "@#!?+&*[]-%.:/();$=><|{}^" + "'`"
     for p in punctuations:
-        tweet = tweet.replace(p, f' {p} ')
+        tweet = tweet.replace(p, f" {p} ")
 
     # ... and ..
-    tweet = tweet.replace('...', ' ... ')
-    if '...' not in tweet:
-        tweet = tweet.replace('..', ' ... ')
+    tweet = tweet.replace("...", " ... ")
+    if "..." not in tweet:
+        tweet = tweet.replace("..", " ... ")
 
     # Acronyms
     tweet = re.sub(r"MH370", "Malaysia Airlines Flight 370", tweet)

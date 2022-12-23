@@ -12,7 +12,4 @@ class TweetDataset:
     def __getitem__(self, item):
         tweet = self.tweets[item, :]
         target = self.targets[item]
-        return {
-            "tweet": torch.tensor(tweet, dtype=torch.long),
-            "target": torch.tensor(target, dtype=torch.float)
-        }
+        return {"tweet": torch.tensor(tweet, dtype=torch.long), "target": torch.tensor(target, dtype=torch.float)}

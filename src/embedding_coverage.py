@@ -41,7 +41,7 @@ def check_embeddings_coverage(X, embeddings):
             n_oov += vocab[word]
 
     vocab_coverage = len(covered) / len(vocab)
-    text_coverage = (n_covered / (n_covered + n_oov))
+    text_coverage = n_covered / (n_covered + n_oov)
 
     sorted_oov = sorted(oov.items(), key=operator.itemgetter(1))[::-1]
     return sorted_oov, vocab_coverage, text_coverage
@@ -52,8 +52,8 @@ if __name__ == "__main__":
     train_df = pd.read_csv(config.ORIGINAL_TRAIN_DATA)
     test_df = pd.read_csv(config.ORIGINAL_TEST_DATA)
 
-    train_df[config.CLEANED_TEXT] = train_df['text'].apply(lambda s: clean(s))
-    test_df[config.CLEANED_TEXT] = test_df['text'].apply(lambda s: clean(s))
+    train_df[config.CLEANED_TEXT] = train_df["text"].apply(lambda s: clean(s))
+    test_df[config.CLEANED_TEXT] = test_df["text"].apply(lambda s: clean(s))
 
     train_df.to_csv(config.MODIFIED_TRAIN, index=False)
     test_df.to_csv(config.MODIFIED_TRAIN, index=False)
